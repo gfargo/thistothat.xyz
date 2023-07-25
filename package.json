@@ -23,6 +23,7 @@
     "@radix-ui/react-toast": "^1.1.4",
     "@uiw/codemirror-theme-tokyo-night": "^4.19.11",
     "@uiw/react-codemirror": "^4.19.11",
+    "@vercel/analytics": "^1.0.1",
     "ahooks": "^3.7.8",
     "class-variance-authority": "^0.6.1",
     "clsx": "^2.0.0",

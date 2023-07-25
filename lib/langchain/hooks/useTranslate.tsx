@@ -1,6 +1,7 @@
 import { copyToClipboard } from '@/lib/utils';
 import { useAppContext } from '@/components/AppContext';
 import { OpenAIModel } from '@/types/types';
+import { useToast } from '@/components/ui/use-toast';
 
 interface TranslateBody {
   inputLanguage: string;
@@ -13,7 +14,7 @@ interface TranslateBody {
 export const useTranslate = () => {
   const {
     apiKey,
-    model =  'gpt-3.5-turbo',
+    model = 'gpt-3.5-turbo',
     inputLanguage,
     outputLanguage,
     inputCode,
@@ -21,6 +22,7 @@ export const useTranslate = () => {
     setLoading,
     setHasTranslated,
   } = useAppContext();
+  const { toast } = useToast();
 
   const translate = async () => {
     const maxCodeLength = model === 'gpt-3.5-turbo' ? 6000 : 12000;
@@ -31,7 +33,28 @@ export const useTranslate = () => {
       !inputCode ||
       inputCode.length > maxCodeLength
     ) {
-      // Handle input errors here...
+      if (!apiKey) {
+        toast({
+          title: 'API Key is required',
+          variant: 'destructive',
+        });
+      } else if (inputLanguage === outputLanguage) {
+        toast({
+          title: 'Input and output languages must be different',
+          variant: 'destructive',
+        });
+      } else if (!inputCode) {
+        toast({
+          title: 'Input code is required',
+          variant: 'destructive',
+        });
+      } else if (inputCode.length > maxCodeLength) {
+        toast({
+          title: 'Input code is too long',
+          variant: 'destructive',
+        });
+      }
+
       return;
     }
 
@@ -68,7 +91,7 @@ export const useTranslate = () => {
       if (!reader) {
         break;
       }
-      
+
       const { value, done } = await reader.read();
 
       if (done) {

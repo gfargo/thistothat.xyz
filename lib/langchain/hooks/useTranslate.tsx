@@ -36,6 +36,7 @@ export const useTranslate = () => {
       if (!apiKey) {
         toast({
           title: 'API Key is required',
+          description: 'Click the gear icon to enter your API key.',
           variant: 'destructive',
         });
       } else if (inputLanguage === outputLanguage) {
